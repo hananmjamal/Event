@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import authenticate, login,logout
-from .forms import EventRegistrationForm  # Import your EventRegistrationForm if needed
+from .forms import EventRegistrationForm, CustomUserCreationForm  # Import your EventRegistrationForm if needed
 from django.contrib.auth.models import User
 from .models import Event
 from django.contrib.auth.decorators import login_required
@@ -130,7 +130,7 @@ def plain_view(request):
 @csrf_protect
 def signup_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
 
@@ -138,10 +138,10 @@ def signup_view(request):
             login(request, user)
 
             # Redirect to the home page or any other desired page
-            return redirect('login')  # Change 'home' to the actual name of your home view
+            return redirect('plain')  # Change 'home' to the actual name of your home view
 
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
 
     return render(request, 'event_app/signup.html', {'form': form})
 
